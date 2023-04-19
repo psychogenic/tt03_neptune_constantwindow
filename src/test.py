@@ -113,7 +113,7 @@ async def note_b(dut, delta=0, msg=""):
     
 @cocotb.test()
 async def note_e_lowclose(dut):
-    dispValues = await note_e(dut, eFreq=83, delta=-7, msg="E low/close")
+    dispValues = await note_e(dut, eFreq=83, delta=-3, msg="E low/close")
     assert dispValues[0] == (displayProx['lowclose'] & 0x7F) 
 
 
