@@ -110,19 +110,34 @@ async def note_b(dut, delta=0, msg=""):
     assert dispValues[1] == (displayNotes['B'] & 0x7F)
     return dispValues
     
-    
-    
-@cocotb.test()
-async def note_e_lowclose(dut):
-    dispValues = await note_e(dut, eFreq=83, delta=-6, msg="E low/close")
-    assert dispValues[0] == (displayProx['lowclose'] & 0x7F) 
-
 
     
 @cocotb.test()
 async def note_e_highfar(dut):
     dispValues = await note_e(dut, eFreq=330, delta=9, msg="E high/far")
     assert dispValues[0] == (displayProx['hifar'] & 0x7F) 
+
+    
+@cocotb.test()
+async def note_e_lowclose(dut):
+    dispValues = await note_e(dut, eFreq=83, delta=-6, msg="E low/close")
+    assert dispValues[0] == (displayProx['lowclose'] & 0x7F) 
+    
+    
+
+    
+@cocotb.test()
+async def note_e_exact(dut):
+    dispValues = await note_e(dut, eFreq=330, delta=0, msg="E exact")
+    assert dispValues[0] == (displayProx['exact'] & 0x7F) 
+
+
+@cocotb.test()
+async def note_e_exact_fatstring(dut):
+    dispValues = await note_e(dut, eFreq=83, delta=0, msg="E fat exact")
+    assert dispValues[0] == (displayProx['exact'] & 0x7F) 
+    
+    
 
 @cocotb.test()
 async def note_g_lowclose(dut):
