@@ -4,7 +4,7 @@
 # defaults
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
-COCOTB_RESOLVE_X ?= ZEROS
+COCOTB_RESOLVE_X ?= ONES
 export COCOTB_RESOLVE_X
 
 # normal simulation
