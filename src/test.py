@@ -1,5 +1,7 @@
 import math
 import cocotb
+import os 
+
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 
@@ -22,6 +24,7 @@ displayProx = {
 
 }
 
+os.environ['COCOTB_RESOLVE_X'] = 'RANDOM'
 async def reset(dut):
     dut._log.info("reset")
     dut.rst.value = 1

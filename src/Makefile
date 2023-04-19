@@ -4,6 +4,8 @@
 # defaults
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
+COCOTB_RESOLVE_X ?= RANDOM
+export COCOTB_RESOLVE_X
 
 # normal simulation
 ifneq ($(GATES),yes)
