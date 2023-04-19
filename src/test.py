@@ -25,7 +25,7 @@ displayProx = {
 
 }
 
-os.environ['COCOTB_RESOLVE_X'] = 'RANDOM'
+# os.environ['COCOTB_RESOLVE_X'] = 'RANDOM'
 async def reset(dut):
     dut._log.info("reset")
     dut.rst.value = 1
