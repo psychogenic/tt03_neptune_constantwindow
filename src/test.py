@@ -117,6 +117,14 @@ async def note_e_highfar(dut):
     dispValues = await note_e(dut, eFreq=330, delta=9, msg="E high/far")
     assert dispValues[0] == (displayProx['hifar'] & 0x7F) 
 
+
+
+    
+@cocotb.test()
+async def note_e_highfar_duplicate(dut):
+    dispValues = await note_e(dut, eFreq=330, delta=9, msg="E high/far")
+    assert dispValues[0] == (displayProx['hifar'] & 0x7F) 
+
     
 @cocotb.test()
 async def note_e_lowclose(dut):
