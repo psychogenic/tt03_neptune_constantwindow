@@ -29,10 +29,10 @@ os.environ['COCOTB_RESOLVE_X'] = 'RANDOM'
 async def reset(dut):
     dut._log.info("reset")
     dut.rst.value = 1
-    await ClockCycles(dut.clk, 10)
+    await ClockCycles(dut.clk, 20)
     dut.rst.value = 0
     dut.clk_config.value = 0 # 1khz clock
-    await ClockCycles(dut.clk, 15)
+    await ClockCycles(dut.clk, 500)
     
     
 async def startup(dut):
@@ -44,7 +44,7 @@ async def getDisplayValues(dut):
     displayedValues = [None, None]
     attemptCount = 0
     while None in displayedValues or attemptCount < 3:
-        displayedValues[int(dut.prox_select.value)] = int(dut.segments.value & 0x7f)
+        displayedValues[int(dut.prox_select.value)] = int(dut.segments.value & 0x7F)
         
         await ClockCycles(dut.clk, 1)
         
