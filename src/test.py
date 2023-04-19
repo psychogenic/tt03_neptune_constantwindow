@@ -41,7 +41,7 @@ async def getDisplayValues(dut):
     attemptCount = 0
     while None in displayedValues or attemptCount < 3:
         await ClockCycles(dut.clk, 1)
-        displayedValues[int(dut.prox_select.value)] = int(dut.segments.value)
+        displayedValues[int(dut.prox_select.value)] = int(dut.segments.value & 0x7f)
         
         attemptCount += 1
         if attemptCount > 100:
