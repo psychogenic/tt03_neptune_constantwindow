@@ -27,18 +27,23 @@ displayProx = {
 
 # os.environ['COCOTB_RESOLVE_X'] = 'RANDOM'
 async def reset(dut):
-    dut._log.info("reset")
-    dut.rst.value = 1
-    await ClockCycles(dut.clk, 20)
     dut.rst.value = 0
     dut.clk_config.value = 0 # 1khz clock
-    await ClockCycles(dut.clk, 500)
-    
+    await ClockCycles(dut.clk, 5)
+    dut._log.info("reset")
+    dut.input_pulse.value = 1
+    dut.rst.value = 1
+    await ClockCycles(dut.clk, 5)
+    dut.input_pulse.value = 0
+    dut.rst.value = 0
+    await ClockCycles(dut.clk, 5)
+   
     
 async def startup(dut):
     clock = Clock(dut.clk, 1, units="ms")
     cocotb.start_soon(clock.start())
     await reset(dut)
+    dut.input_pulse.value = 0
             
 async def getDisplayValues(dut):
     displayedValues = [None, None]
@@ -83,7 +88,7 @@ async def setup_tuner(dut):
 async def note_toggle(dut, freq, delta=0, msg=""):
     dut._log.info(msg)
     await startup(dut)
-    dispValues = await inputPulsesFor(dut, freq + delta, 1.65)  
+    dispValues = await inputPulsesFor(dut, freq + delta, 1.0)  
     return dispValues
     
     
@@ -114,14 +119,6 @@ async def note_b(dut, delta=0, msg=""):
     
 @cocotb.test()
 async def note_e_highfar(dut):
-    dispValues = await note_e(dut, eFreq=330, delta=9, msg="E high/far")
-    assert dispValues[0] == (displayProx['hifar'] & 0x7F) 
-
-
-
-    
-@cocotb.test()
-async def note_e_highfar_duplicate(dut):
     dispValues = await note_e(dut, eFreq=330, delta=9, msg="E high/far")
     assert dispValues[0] == (displayProx['hifar'] & 0x7F) 
 

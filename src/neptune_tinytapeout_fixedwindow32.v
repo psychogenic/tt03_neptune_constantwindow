@@ -1,5 +1,5 @@
 /*
-    Neptune v1.0.1 fixed 32Hz window, for tinytapeout3.
+    Neptune v1.0.2 fixed 32Hz window, for tinytapeout3.
     Copyright (C) 2023 Pat Deegan, https://psychogenic.com
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -12,29 +12,28 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 module discriminator(rst, edge_count, note, match_exact, match_high, match_far, clk);
   reg \$auto$verilog_backend.cc:2097:dump_module$1  = 0;
   wire \$1 ;
   wire \$10 ;
-  wire \$12 ;
-  wire [8:0] \$14 ;
-  wire [8:0] \$15 ;
-  wire [8:0] \$16 ;
-  wire [8:0] \$18 ;
+  wire [3:0] \$12 ;
+  wire [3:0] \$13 ;
+  wire \$15 ;
+  wire \$17 ;
   wire [8:0] \$19 ;
+  wire [8:0] \$20 ;
   wire [8:0] \$21 ;
-  wire [8:0] \$22 ;
+  wire [8:0] \$23 ;
   wire [8:0] \$24 ;
-  wire [8:0] \$25 ;
+  wire [8:0] \$26 ;
   wire [8:0] \$27 ;
-  wire [8:0] \$28 ;
+  wire [8:0] \$29 ;
   wire \$3 ;
   wire [8:0] \$30 ;
-  wire [8:0] \$31 ;
-  wire \$33 ;
-  wire [5:0] \$35 ;
-  wire [5:0] \$36 ;
+  wire [8:0] \$32 ;
+  wire [8:0] \$33 ;
+  wire [8:0] \$35 ;
+  wire [8:0] \$36 ;
   wire \$38 ;
   wire [8:0] \$40 ;
   wire [8:0] \$41 ;
@@ -43,19 +42,20 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
   wire \$47 ;
   wire \$49 ;
   wire \$5 ;
-  wire [3:0] \$7 ;
-  wire [3:0] \$8 ;
+  wire [5:0] \$7 ;
+  wire [5:0] \$8 ;
   input clk;
   wire clk;
   reg [2:0] curNoteIndex = 3'h0;
   reg [2:0] \curNoteIndex$next ;
   (* enum_base_type = "DiscriminatorState" *)
-  (* enum_value_000 = "Init" *)
-  (* enum_value_001 = "CalculateDiffFromTarget" *)
-  (* enum_value_010 = "Compare" *)
-  (* enum_value_011 = "MovedToNextCheckBounds" *)
-  (* enum_value_100 = "DetectedValidNote" *)
-  (* enum_value_101 = "DisplayResult" *)
+  (* enum_value_000 = "PowerUp" *)
+  (* enum_value_001 = "Init" *)
+  (* enum_value_010 = "CalculateDiffFromTarget" *)
+  (* enum_value_011 = "Compare" *)
+  (* enum_value_100 = "MovedToNextCheckBounds" *)
+  (* enum_value_101 = "DetectedValidNote" *)
+  (* enum_value_110 = "DisplayResult" *)
   reg [2:0] curState = 3'h0;
   reg [2:0] \curState$next ;
   input [7:0] edge_count;
@@ -82,17 +82,17 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
   wire rst;
   reg [7:0] subtractResult = 8'h00;
   reg [7:0] \subtractResult$next ;
-  assign \$10  = noMatchCount == 5'h1f;
-  assign \$12  = subtractResult <= 5'h10;
-  assign \$16  = 8'had - edge_count;
+  assign \$10  = subtractResult <= 5'h10;
+  assign \$13  = curNoteIndex + 1'h1;
+  assign \$15  = noMatchCount == 5'h1f;
+  assign \$17  = subtractResult <= 5'h10;
   assign \$1  = subtractResult <= 5'h10;
-  assign \$19  = 8'h83 - edge_count;
-  assign \$22  = 8'h6a - edge_count;
-  assign \$25  = 8'h51 - edge_count;
-  assign \$28  = 8'h3f - edge_count;
-  assign \$31  = 8'h31 - edge_count;
-  assign \$33  = curNoteIndex < 3'h6;
-  assign \$36  = noMatchCount + 1'h1;
+  assign \$21  = 8'had - edge_count;
+  assign \$24  = 8'h83 - edge_count;
+  assign \$27  = 8'h6a - edge_count;
+  assign \$30  = 8'h51 - edge_count;
+  assign \$33  = 8'h3f - edge_count;
+  assign \$36  = 8'h31 - edge_count;
   assign \$38  = subtractResult <= 4'h8;
   assign \$3  = curNoteIndex < 3'h6;
   assign \$41  = 5'h10 - subtractResult;
@@ -103,13 +103,13 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
   always @(posedge clk)
     curState <= \curState$next ;
   always @(posedge clk)
+    noMatchCount <= \noMatchCount$next ;
+  always @(posedge clk)
     curNoteIndex <= \curNoteIndex$next ;
   always @(posedge clk)
     note <= \note$next ;
   always @(posedge clk)
     subtractResult <= \subtractResult$next ;
-  always @(posedge clk)
-    noMatchCount <= \noMatchCount$next ;
   always @(posedge clk)
     readingProximityResult <= \readingProximityResult$next ;
   always @(posedge clk)
@@ -118,10 +118,10 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
     match_exact <= \match_exact$next ;
   always @(posedge clk)
     match_far <= \match_far$next ;
-  assign \$5  = subtractResult <= 5'h10;
+  assign \$5  = curNoteIndex < 3'h6;
   always @(posedge clk)
     match_high <= \match_high$next ;
-  assign \$8  = curNoteIndex + 1'h1;
+  assign \$8  = noMatchCount + 1'h1;
   always @* begin
     if (\$auto$verilog_backend.cc:2097:dump_module$1 ) begin end
     (* full_case = 32'd1 *)
@@ -131,27 +131,29 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h1:
           \curState$next  = 3'h2;
       3'h2:
+          \curState$next  = 3'h3;
+      3'h3:
           (* full_case = 32'd1 *)
           casez (\$1 )
             1'h1:
-                \curState$next  = 3'h4;
+                \curState$next  = 3'h5;
             default:
-                \curState$next  = 3'h3;
+                \curState$next  = 3'h4;
           endcase
-      3'h3:
+      3'h4:
           (* full_case = 32'd1 *)
           casez (\$3 )
             1'h1:
-                \curState$next  = 3'h1;
+                \curState$next  = 3'h2;
             default:
-                \curState$next  = 3'h0;
+                \curState$next  = 3'h1;
           endcase
-      3'h4:
-          \curState$next  = 3'h5;
       3'h5:
-          \curState$next  = 3'h0;
+          \curState$next  = 3'h6;
+      3'h6:
+          \curState$next  = 3'h1;
       default:
-          \curState$next  = 3'h0;
+          \curState$next  = 3'h1;
     endcase
     casez (rst)
       1'h1:
@@ -160,19 +162,49 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2097:dump_module$1 ) begin end
-    \curNoteIndex$next  = curNoteIndex;
+    \noMatchCount$next  = noMatchCount;
     casez (curState)
       3'h0:
-          \curNoteIndex$next  = 3'h0;
+          \noMatchCount$next  = 5'h00;
       3'h1:
           /* empty */;
       3'h2:
+          /* empty */;
+      3'h3:
+          /* empty */;
+      3'h4:
           (* full_case = 32'd1 *)
           casez (\$5 )
             1'h1:
                 /* empty */;
             default:
-                \curNoteIndex$next  = \$8 [2:0];
+                \noMatchCount$next  = \$8 [4:0];
+          endcase
+      3'h5:
+          \noMatchCount$next  = 5'h00;
+    endcase
+    casez (rst)
+      1'h1:
+          \noMatchCount$next  = 5'h00;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2097:dump_module$1 ) begin end
+    \curNoteIndex$next  = curNoteIndex;
+    casez (curState)
+      3'h0:
+          /* empty */;
+      3'h1:
+          \curNoteIndex$next  = 3'h0;
+      3'h2:
+          /* empty */;
+      3'h3:
+          (* full_case = 32'd1 *)
+          casez (\$10 )
+            1'h1:
+                /* empty */;
+            default:
+                \curNoteIndex$next  = \$13 [2:0];
           endcase
     endcase
     casez (rst)
@@ -185,14 +217,16 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
     \note$next  = note;
     casez (curState)
       3'h0:
-          casez (\$10 )
+          /* empty */;
+      3'h1:
+          casez (\$15 )
             1'h1:
                 \note$next  = 3'h0;
           endcase
-      3'h1:
-          /* empty */;
       3'h2:
-          casez (\$12 )
+          /* empty */;
+      3'h3:
+          casez (\$17 )
             1'h1:
                 (* full_case = 32'd1 *)
                 casez (curNoteIndex)
@@ -223,51 +257,27 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h0:
           /* empty */;
       3'h1:
+          /* empty */;
+      3'h2:
           (* full_case = 32'd1 *)
           casez (curNoteIndex)
             3'h0:
-                \subtractResult$next  = \$16 [7:0];
+                \subtractResult$next  = \$21 [7:0];
             3'h1:
-                \subtractResult$next  = \$19 [7:0];
+                \subtractResult$next  = \$24 [7:0];
             3'h2:
-                \subtractResult$next  = \$22 [7:0];
+                \subtractResult$next  = \$27 [7:0];
             3'h3:
-                \subtractResult$next  = \$25 [7:0];
+                \subtractResult$next  = \$30 [7:0];
             3'h4:
-                \subtractResult$next  = \$28 [7:0];
+                \subtractResult$next  = \$33 [7:0];
             3'h?:
-                \subtractResult$next  = \$31 [7:0];
+                \subtractResult$next  = \$36 [7:0];
           endcase
     endcase
     casez (rst)
       1'h1:
           \subtractResult$next  = 8'h00;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2097:dump_module$1 ) begin end
-    \noMatchCount$next  = noMatchCount;
-    casez (curState)
-      3'h0:
-          /* empty */;
-      3'h1:
-          /* empty */;
-      3'h2:
-          /* empty */;
-      3'h3:
-          (* full_case = 32'd1 *)
-          casez (\$33 )
-            1'h1:
-                /* empty */;
-            default:
-                \noMatchCount$next  = \$36 [4:0];
-          endcase
-      3'h4:
-          \noMatchCount$next  = 5'h00;
-    endcase
-    casez (rst)
-      1'h1:
-          \noMatchCount$next  = 5'h00;
     endcase
   end
   always @* begin
@@ -283,6 +293,8 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h3:
           /* empty */;
       3'h4:
+          /* empty */;
+      3'h5:
           (* full_case = 32'd1 *)
           casez (\$38 )
             1'h1:
@@ -309,6 +321,8 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h3:
           /* empty */;
       3'h4:
+          /* empty */;
+      3'h5:
           (* full_case = 32'd1 *)
           casez (\$43 )
             1'h1:
@@ -337,6 +351,8 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h4:
           /* empty */;
       3'h5:
+          /* empty */;
+      3'h6:
           (* full_case = 32'd1 *)
           casez (\$45 )
             1'h1:
@@ -365,6 +381,8 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h4:
           /* empty */;
       3'h5:
+          /* empty */;
+      3'h6:
           (* full_case = 32'd1 *)
           casez (\$47 )
             1'h1:
@@ -399,6 +417,8 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
       3'h4:
           /* empty */;
       3'h5:
+          /* empty */;
+      3'h6:
           \match_high$next  = inputFreqHigher;
     endcase
     casez (rst)
@@ -407,12 +427,12 @@ module discriminator(rst, edge_count, note, match_exact, match_high, match_far, 
     endcase
   end
   assign \$7  = \$8 ;
-  assign \$15  = \$16 ;
-  assign \$18  = \$19 ;
-  assign \$21  = \$22 ;
-  assign \$24  = \$25 ;
-  assign \$27  = \$28 ;
-  assign \$30  = \$31 ;
+  assign \$12  = \$13 ;
+  assign \$20  = \$21 ;
+  assign \$23  = \$24 ;
+  assign \$26  = \$27 ;
+  assign \$29  = \$30 ;
+  assign \$32  = \$33 ;
   assign \$35  = \$36 ;
   assign \$40  = \$41 ;
 endmodule
@@ -420,7 +440,6 @@ endmodule
 module display(rst, valueNote, valueProxim, segments, proximitySelect, clk);
   reg \$auto$verilog_backend.cc:2097:dump_module$2  = 0;
   wire \$1 ;
-  wire \$3 ;
   input clk;
   wire clk;
   wire [7:0] notedisplay_segments;
@@ -442,15 +461,14 @@ module display(rst, valueNote, valueProxim, segments, proximitySelect, clk);
   input [2:0] valueProxim;
   wire [2:0] valueProxim;
   assign \$1  = ! valueNote;
-  assign \$3  = ~ proximitySelect;
   always @(posedge clk)
     notedisplay_value <= \notedisplay_value$next ;
   always @(posedge clk)
     proxdisplay_value <= \proxdisplay_value$next ;
   always @(posedge clk)
-    segments <= \segments$next ;
-  always @(posedge clk)
     proximitySelect <= \proximitySelect$next ;
+  always @(posedge clk)
+    segments <= \segments$next ;
   notedisplay notedisplay (
     .clk(clk),
     .rst(rst),
@@ -481,6 +499,18 @@ module display(rst, valueNote, valueProxim, segments, proximitySelect, clk);
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2097:dump_module$2 ) begin end
+    \proximitySelect$next  = 1'h1;
+    casez (proximitySelect)
+      1'h1:
+          \proximitySelect$next  = 1'h0;
+    endcase
+    casez (rst)
+      1'h1:
+          \proximitySelect$next  = 1'h0;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2097:dump_module$2 ) begin end
     (* full_case = 32'd1 *)
     casez (proximitySelect)
       1'h1:
@@ -497,14 +527,6 @@ module display(rst, valueNote, valueProxim, segments, proximitySelect, clk);
     casez (rst)
       1'h1:
           \segments$next  = 8'h00;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2097:dump_module$2 ) begin end
-    \proximitySelect$next  = \$3 ;
-    casez (rst)
-      1'h1:
-          \proximitySelect$next  = 1'h0;
     endcase
   end
 endmodule
@@ -594,38 +616,6 @@ module ffsync(rst, \input , syncOut, clk);
   assign \stage0$next  = \input ;
 endmodule
 
-module psychogenic_neptunefixed(io_in, io_out);
-  wire clock;
-  wire input_pulses;
-  input [7:0] io_in;
-  wire [7:0] io_in;
-  output [7:0] io_out;
-  wire [7:0] io_out;
-  wire reset;
-  wire tuner_clk;
-  wire [1:0] tuner_clock_config;
-  wire [7:0] tuner_displaySegments;
-  wire tuner_displaySelect;
-  wire tuner_input_pulses;
-  wire tuner_rst;
-  tuner tuner (
-    .clk(tuner_clk),
-    .clock_config(tuner_clock_config),
-    .displaySegments(tuner_displaySegments),
-    .displaySelect(tuner_displaySelect),
-    .input_pulses(tuner_input_pulses),
-    .rst(tuner_rst)
-  );
-  assign io_out = { tuner_displaySelect, tuner_displaySegments[6:0] };
-  assign tuner_input_pulses = input_pulses;
-  assign tuner_clock_config = io_in[3:2];
-  assign tuner_rst = io_in[1];
-  assign tuner_clk = io_in[0];
-  assign reset = io_in[1];
-  assign clock = io_in[0];
-  assign input_pulses = io_in[4];
-endmodule
-
 module notedisplay(rst, value, segments, clk);
   reg \$auto$verilog_backend.cc:2097:dump_module$4  = 0;
   wire \$1 ;
@@ -643,7 +633,7 @@ module notedisplay(rst, value, segments, clk);
     segments <= \segments$next ;
   always @* begin
     if (\$auto$verilog_backend.cc:2097:dump_module$4 ) begin end
-    (* full_case = 32'd1 *)
+    \segments$next  = 8'h00;
     casez (\$1 )
       1'h1:
           (* full_case = 32'd1 *)
@@ -665,8 +655,6 @@ module notedisplay(rst, value, segments, clk);
             3'h?:
                 \segments$next  = 8'h8e;
           endcase
-      default:
-          \segments$next  = 8'h00;
     endcase
     casez (rst)
       1'h1:
@@ -692,7 +680,7 @@ module proxdisplay(rst, value, segments, clk);
     segments <= \segments$next ;
   always @* begin
     if (\$auto$verilog_backend.cc:2097:dump_module$5 ) begin end
-    (* full_case = 32'd1 *)
+    \segments$next  = 8'h00;
     casez (\$1 )
       1'h1:
           (* full_case = 32'd1 *)
@@ -714,14 +702,40 @@ module proxdisplay(rst, value, segments, clk);
             3'h?:
                 \segments$next  = 8'h01;
           endcase
-      default:
-          \segments$next  = 8'h00;
     endcase
     casez (rst)
       1'h1:
           \segments$next  = 8'h00;
     endcase
   end
+endmodule
+
+module psychogenic_neptunefixed(io_in, io_out);
+  wire input_pulses;
+  input [7:0] io_in;
+  wire [7:0] io_in;
+  output [7:0] io_out;
+  wire [7:0] io_out;
+  wire tuner_clk;
+  wire [1:0] tuner_clock_config;
+  wire [7:0] tuner_displaySegments;
+  wire tuner_displaySelect;
+  wire tuner_input_pulses;
+  wire tuner_rst;
+  tuner tuner (
+    .clk(tuner_clk),
+    .clock_config(tuner_clock_config),
+    .displaySegments(tuner_displaySegments),
+    .displaySelect(tuner_displaySelect),
+    .input_pulses(tuner_input_pulses),
+    .rst(tuner_rst)
+  );
+  assign io_out = { tuner_displaySelect, tuner_displaySegments[6:0] };
+  assign tuner_input_pulses = input_pulses;
+  assign tuner_clock_config = io_in[3:2];
+  assign tuner_rst = io_in[1];
+  assign tuner_clk = io_in[0];
+  assign input_pulses = io_in[4];
 endmodule
 
 module pulsecounter(rst, \input , clock_config, pulseCount, clk);
