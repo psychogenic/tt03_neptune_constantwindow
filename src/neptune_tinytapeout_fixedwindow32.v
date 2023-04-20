@@ -1,5 +1,5 @@
 /*
-    Neptune v1.0.3 fixed 32Hz window, for tinytapeout3.
+    Neptune v1.0.4 fixed 32Hz window, for tinytapeout3.
     Copyright (C) 2023 Pat Deegan, https://psychogenic.com
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -12,6 +12,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 
 `default_nettype none
 `timescale 1ns/1ps
@@ -735,7 +736,7 @@ module psychogenic_neptunefixed(io_in, io_out);
     .input_pulses(tuner_input_pulses),
     .rst(tuner_rst)
   );
-  assign io_out = { tuner_displaySelect, tuner_displaySegments[6:0] };
+  assign io_out = { tuner_displaySelect, tuner_displaySegments[7:1] };
   assign tuner_input_pulses = input_pulses;
   assign tuner_clock_config = io_in[3:2];
   assign tuner_rst = io_in[1];
